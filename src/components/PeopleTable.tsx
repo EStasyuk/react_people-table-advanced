@@ -3,6 +3,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Person } from '../types/Person';
 import { SearchLink } from './SearchLink';
+import { Link, useLocation } from 'react-router-dom';
 
 interface Props {
   people: Person[];
@@ -61,13 +62,15 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
         {people.map(person => (
           <tr key={person.slug} data-cy="person">
             <td>
-              <SearchLink
-                params={{}}
-                to={`/people/${person.slug}`}
+              <Link
+                to={{
+                  pathname: `/people/${person.slug}`,
+                  search: location.search,
+                }}
                 className={person.sex === 'f' ? 'has-text-danger' : ''}
               >
                 {person.name}
-              </SearchLink>
+              </Link>
             </td>
             <td>{person.sex}</td>
             <td>{person.born}</td>

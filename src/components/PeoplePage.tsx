@@ -4,7 +4,7 @@ import { PeopleFilters } from './PeopleFilters';
 import { Loader } from './Loader';
 import { PeopleTable } from './PeopleTable';
 import { Person } from '../types/Person';
-
+import { getPeople } from '../api';
 
 export const PeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -20,15 +20,7 @@ export const PeoplePage = () => {
 
   useEffect(() => {
     setLoading(true);
-    // Завантажуємо дані через fetch
-    // Якщо файл people.json лежить у public/api/people.json
-    fetch('api/people.json') 
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+    getPeople()
       .then(data => {
         setPeople(data);
         setError(false);
