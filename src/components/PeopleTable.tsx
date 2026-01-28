@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import { Person } from '../types/Person';
 import { SearchLink } from './SearchLink';
-import { Link, useLocation } from 'react-router-dom';
 
 interface Props {
   people: Person[];
@@ -13,6 +12,7 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
   const [searchParams] = useSearchParams();
   const sort = searchParams.get('sort');
   const order = searchParams.get('order');
+  const location = useLocation();
 
   const getSortParams = (field: string) => {
     if (sort !== field) {
@@ -34,6 +34,13 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
     return order === 'desc' ? 'fas fa-sort-down' : 'fas fa-sort-up';
   };
 
+  const columnLabels: Record<string, string> = {
+    name: 'Name',
+    sex: 'Sex',
+    born: 'Born',
+    died: 'Died',
+  };
+
   return (
     <table
       data-cy="peopleTable"
@@ -43,8 +50,8 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
         <tr>
           {['name', 'sex', 'born', 'died'].map(field => (
             <th key={field}>
-              <span className="is-flex is-flex-wrap-nowrap is-capitalized">
-                {field}
+              <span className="is-flex is-flex-wrap-nowrap">
+                {columnLabels[field]}
                 <SearchLink params={getSortParams(field)}>
                   <span className="icon">
                     <i className={getSortIcon(field)} />
